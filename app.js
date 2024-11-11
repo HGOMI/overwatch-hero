@@ -1,9 +1,9 @@
 async function fetchData() {
     try {
-        const url = "https://overfast-api.tekrop.fr/..." // 실제 API URL
+        const url = "https://overfast-api.tekrop.fr/..."; // 실제 API URL
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data);
+        console.log(data); // 데이터 확인용
         return data;
     } catch (error) {
         console.error("데이터를 가져오는 중 오류 발생:", error);
