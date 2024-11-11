@@ -1,56 +1,57 @@
-async function fetchData() {
+async function fetchHeroes() {
     try {
-        const url = "https://overfast-api.tekrop.fr/..."; // 실제 API URL
-        const response = await fetch(url);
-        const data = await response.json();
-        console.log(data); // 데이터 확인용
-        return data;
+        const response = await fetch('https://overfast-api.tekrop.fr/heroes'); // API URL 확인 필요
+        const heroes = await response.json();
+        displayHeroList(heroes);
     } catch (error) {
-        console.error("데이터를 가져오는 중 오류 발생:", error);
+        console.error("영웅 데이터를 가져오는 중 오류 발생:", error);
     }
 }
 
-function processHeroData(data) {
-    const heroPlays = {};
-    data.forEach(record => {
-        const hero = record.hero;
-        const plays = record.plays;
-        heroPlays[hero] = (heroPlays[hero] || 0) + plays;
-    });
-    return heroPlays;
-}
+function displayHeroList(heroes) {
+    const heroList = document.getElementById('heroList');
+    heroList.innerHTML = ''; // 초기화
 
-function drawChart(heroData) {
-    const ctx = document.getElementById("heroChart").getContext("2d");
-    const labels = Object.keys(heroData);
-    const data = Object.values(heroData);
-
-    new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "영웅별 판수",
-                data: data,
-                backgroundColor: "rgba(75, 192, 192, 0.2)",
-                borderColor: "rgba(75, 192, 192, 1)",
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
+    heroes.forEach(hero => {
+        const heroCard = document.createElement('div');
+        heroCard.className = 'hero-card';
+        heroCard.innerHTML = `
+            <img src="${hero.portrait}" alt="${hero.name}">
+            <h3>${hero.name}</h3>
+            <p>${hero.role}</p>
+        `;
+        heroCard.addEventListener('click', () => displayHeroDetails(hero));
+        heroList.appendChild(heroCard);
     });
 }
 
-async function initialize() {
-    const rawData = await fetchData();
-    const heroData = processHeroData(rawData);
-    drawChart(heroData);
+function displayHeroDetails(hero) {
+    const heroDetails = document.getElementById('heroDetails');
+    heroDetails.innerHTML = `
+        <h2>${hero.name}</h2>
+        <img src="${hero.portrait}" alt="${hero.name}">
+        <p>${hero.description}</p>
+        <p><strong>역할:</strong> ${hero.role}</p>
+        <p><strong>출생지:</strong> ${hero.location}</p>
+        <p><strong>나이:</strong> ${hero.age}</p>
+        <p><strong>생일:</strong> ${hero.birthday}</p>
+        <p><strong>체력:</strong> ${hero.hitpoints.total} (체력: ${hero.hitpoints.health}, 방어: ${hero.hitpoints.armor}, 실드: ${hero.hitpoints.shields})</p>
+        <h3>능력</h3>
+        ${hero.abilities.map(ability => `
+            <div class="ability">
+                <h4>${ability.name}</h4>
+                <img src="${ability.icon}" alt="${ability.name}">
+                <p>${ability.description}</p>
+            </div>
+        `).join('')}
+        <h3>이야기</h3>
+        <p>${hero.story.summary}</p>
+        ${hero.story.chapters.map(chapter => `
+            <h4>${chapter.title}</h4>
+            <p>${chapter.content}</p>
+            <img src="${chapter.picture}" alt="${chapter.title}">
+        `).join('')}
+    `;
 }
 
-window.onload = initialize;
+fetchHeroes();
