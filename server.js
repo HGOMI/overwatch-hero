@@ -28,8 +28,8 @@ db.connect((err) => {
             if (err) throw err;
             console.log('Switched to community_db');
 
-            // 테이블 생성 추가
-            const createTable = `
+            // 게시글 테이블 생성
+            const createPostsTable = `
                 CREATE TABLE IF NOT EXISTS posts (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     title VARCHAR(255) NOT NULL,
@@ -37,14 +37,27 @@ db.connect((err) => {
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             `;
-            db.query(createTable, (err) => {
+            db.query(createPostsTable, (err) => {
                 if (err) throw err;
                 console.log('Table posts is ready');
+            });
+
+            // 사용자 테이블 생성
+            const createUsersTable = `
+                CREATE TABLE IF NOT EXISTS users (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    username VARCHAR(255) NOT NULL UNIQUE,
+                    password VARCHAR(255) NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            `;
+            db.query(createUsersTable, (err) => {
+                if (err) throw err;
+                console.log('Table users is ready');
             });
         });
     });
 });
-
 
 // 게시글 가져오기
 app.get('/posts', (req, res) => {
@@ -57,13 +70,27 @@ app.get('/posts', (req, res) => {
     });
 });
 
-
 // 게시글 추가
 app.post('/posts', (req, res) => {
     const { title, content } = req.body;
     const query = 'INSERT INTO posts (title, content) VALUES (?, ?)';
     db.query(query, [title, content], (err, result) => {
         if (err) throw err;
+        res.json({ success: true });
+    });
+});
+
+// 회원가입 처리
+app.post('/register', (req, res) => {
+    const { username, password } = req.body;
+    const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
+    db.query(query, [username, password], (err) => {
+        if (err) {
+            if (err.code === 'ER_DUP_ENTRY') {
+                return res.json({ success: false, message: '이미 존재하는 아이디입니다.' });
+            }
+            return res.json({ success: false, message: '서버 오류' });
+        }
         res.json({ success: true });
     });
 });
