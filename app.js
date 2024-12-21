@@ -5,7 +5,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const password = document.getElementById('password').value;
 
     // 서버로 로그인 요청 보내기
-    const response = await fetch('/login', {
+    const response = await fetch('https://overwatch-hero-api.onrender.com/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
