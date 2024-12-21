@@ -1,35 +1,46 @@
 const express = require('express');
 const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
 const app = express();
-
 app.use(bodyParser.json());
+app.use(cors());
 
-// DB 연결 설정
+// 데이터베이스 연결 설정
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'password', // 본인의 비밀번호로 변경
-    database: 'overwatch_portal',
+    password: 'password', // 비밀번호 변경 필요
+    database: 'community_db'
 });
 
-// 로그인 처리 API
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
+db.connect(err => {
+    if (err) {
+        console.error('DB 연결 실패:', err);
+    } else {
+        console.log('DB 연결 성공');
+    }
+});
 
-    const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
-    db.query(query, [username, password], (err, results) => {
+// 게시글 가져오기
+app.get('/posts', (req, res) => {
+    db.query('SELECT * FROM posts', (err, results) => {
         if (err) throw err;
-
-        if (results.length > 0) {
-            res.json({ success: true });
-        } else {
-            res.json({ success: false, message: '잘못된 아이디 또는 비밀번호입니다.' });
-        }
+        res.json(results);
     });
 });
 
-// 서버 실행
+// 게시글 추가
+app.post('/posts', (req, res) => {
+    const { title, content } = req.body;
+    const query = 'INSERT INTO posts (title, content) VALUES (?, ?)';
+    db.query(query, [title, content], (err, result) => {
+        if (err) throw err;
+        res.json({ success: true });
+    });
+});
+
 app.listen(3000, () => {
-    console.log('서버가 3000 포트에서 실행 중...');
+    console.log('서버가 3000번 포트에서 실행 중');
 });
