@@ -1,11 +1,9 @@
-CREATE DATABASE overwatch_portal;
-USE overwatch_portal;
+CREATE DATABASE community_db;
+USE community_db;
 
-CREATE TABLE users (
+CREATE TABLE posts (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
--- 샘플 데이터 추가
-INSERT INTO users (username, password) VALUES ('admin', '1234');
