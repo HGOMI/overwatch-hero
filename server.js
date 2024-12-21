@@ -100,7 +100,7 @@ app.post('/register', (req, res) => {
             }
             return res.status(500).json({ success: false, message: '서버 오류' });
         }
-        res.json({ success: true });
+        res.json({ success: true, message: '회원가입 성공!' });
     });
 });
 
@@ -119,11 +119,16 @@ app.post('/login', (req, res) => {
         }
 
         if (results.length > 0) {
-            res.json({ success: true });
+            res.json({ success: true, message: '로그인 성공!' });
         } else {
             res.status(401).json({ success: false, message: '아이디 또는 비밀번호가 잘못되었습니다.' });
         }
     });
+});
+
+// 엔드포인트 확인용
+app.get('/', (req, res) => {
+    res.send('서버가 정상적으로 실행 중입니다.');
 });
 
 app.listen(3000, () => {
