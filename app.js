@@ -42,7 +42,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     const username = document.getElementById('regUsername').value;
     const password = document.getElementById('regPassword').value;
 
-    const response = await fetch('/register', {
+    const response = await fetch('https://overwatch-hero-api.onrender.com/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
