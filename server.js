@@ -83,15 +83,42 @@ app.post('/posts', (req, res) => {
 // 회원가입 처리
 app.post('/register', (req, res) => {
     const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ success: false, message: '아이디와 비밀번호를 입력하세요.' });
+    }
+
     const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
     db.query(query, [username, password], (err) => {
         if (err) {
             if (err.code === 'ER_DUP_ENTRY') {
-                return res.json({ success: false, message: '이미 존재하는 아이디입니다.' });
+                return res.status(409).json({ success: false, message: '이미 존재하는 아이디입니다.' });
             }
-            return res.json({ success: false, message: '서버 오류' });
+            return res.status(500).json({ success: false, message: '서버 오류' });
         }
         res.json({ success: true });
+    });
+});
+
+// 로그인 처리
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ success: false, message: '아이디와 비밀번호를 입력하세요.' });
+    }
+
+    const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+    db.query(query, [username, password], (err, results) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: '서버 오류' });
+        }
+
+        if (results.length > 0) {
+            res.json({ success: true });
+        } else {
+            res.status(401).json({ success: false, message: '아이디 또는 비밀번호가 잘못되었습니다.' });
+        }
     });
 });
 
