@@ -5,7 +5,11 @@ const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+    origin: '*', // 모든 도메인 허용
+    methods: ['GET', 'POST'], // 허용할 HTTP 메서드
+    allowedHeaders: ['Content-Type'] // 허용할 헤더
+}));
 
 // 데이터베이스 연결 설정
 const db = mysql.createConnection({
