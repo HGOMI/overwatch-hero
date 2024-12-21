@@ -3,26 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overwatch 영웅 정보</title>
+    <title>Overwatch 포털</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Overwatch 영웅 정보</h1>
-    <div id="heroContainer">
-        <div id="tankList" class="hero-category">
-            <h2>탱커</h2>
-            <div id="tankHeroes" class="hero-list"></div>
-        </div>
-        <div id="damageList" class="hero-category">
-            <h2>딜러</h2>
-            <div id="damageHeroes" class="hero-list"></div>
-        </div>
-        <div id="supportList" class="hero-category">
-            <h2>서포터</h2>
-            <div id="supportHeroes" class="hero-list"></div>
-        </div>
+    <!-- 로그인 및 카테고리 선택 -->
+    <div id="loginSection">
+        <h1>로그인</h1>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="아이디" required>
+            <input type="password" id="password" placeholder="비밀번호" required>
+            <button type="submit">로그인</button>
+        </form>
     </div>
-    <div id="heroDetails" style="display:none;"></div>
+
+    <div id="categorySection" style="display:none;">
+        <h1>카테고리 선택</h1>
+        <ul>
+            <li><a href="#" id="heroes">영웅 정보</a></li>
+            <li><a href="#" id="community">유저 커뮤니티</a></li>
+            <li><a href="#" id="patchNotes">게임 패치 노트</a></li>
+        </ul>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
