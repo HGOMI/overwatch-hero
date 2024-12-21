@@ -11,7 +11,7 @@ app.use(cors());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'password', // 비밀번호 변경 필요
+    password: '001520', // 비밀번호 변경 필요
     database: 'community_db'
 });
 
