@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- 로그인 및 카테고리 선택 -->
+    <!-- 로그인 및 회원가입 -->
     <div id="loginSection">
         <h1>로그인</h1>
         <form id="loginForm">
@@ -15,6 +15,17 @@
             <input type="password" id="password" placeholder="비밀번호" required>
             <button type="submit">로그인</button>
         </form>
+        <button id="showRegister">회원가입</button>
+    </div>
+
+    <div id="registerSection" style="display:none;">
+        <h1>회원가입</h1>
+        <form id="registerForm">
+            <input type="text" id="regUsername" placeholder="아이디" required>
+            <input type="password" id="regPassword" placeholder="비밀번호" required>
+            <button type="submit">회원가입</button>
+        </form>
+        <button id="showLogin">로그인</button>
     </div>
 
     <div id="categorySection" style="display:none;">
